@@ -207,7 +207,7 @@ public class RNPushNotificationHelper {
             }
 
             File file = new File(largeIcon);
-
+            // coin bank
             if (largeIcon != null && !file.exists()) {
                 largeIconResId = res.getIdentifier(largeIcon, "mipmap", packageName);
             } else {
