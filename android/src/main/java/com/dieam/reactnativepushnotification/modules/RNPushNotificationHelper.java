@@ -27,6 +27,7 @@ import com.facebook.react.bridge.ReadableMap;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.util.Arrays;
 
 import static com.dieam.reactnativepushnotification.modules.RNPushNotification.LOG_TAG;
@@ -205,14 +206,17 @@ public class RNPushNotificationHelper {
                 }
             }
 
-            if (largeIcon != null) {
+            File file = new File(largeIcon);
+
+            if (largeIcon != null && !file.exists()) {
                 largeIconResId = res.getIdentifier(largeIcon, "mipmap", packageName);
             } else {
                 largeIconResId = res.getIdentifier("ic_launcher", "mipmap", packageName);
             }
 
-            Bitmap largeIconBitmap = BitmapFactory.decodeResource(res, largeIconResId);
-
+            Bitmap largeIconBitmap = file.exists() ?
+                    BitmapFactory.decodeFile(largeIcon) :
+                    BitmapFactory.decodeResource(res, largeIconResId);
             if (largeIconResId != 0 && (largeIcon != null || Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)) {
                 notification.setLargeIcon(largeIconBitmap);
             }
