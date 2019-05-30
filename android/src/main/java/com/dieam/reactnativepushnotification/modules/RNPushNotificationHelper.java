@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.dieam.reactnativepushnotification.BuildConfig;
 import com.facebook.react.bridge.ReadableMap;
 
 import org.json.JSONArray;
@@ -488,7 +489,7 @@ public class RNPushNotificationHelper {
         if (manager == null)
             return;
 
-        final CharSequence name = "rn-push-notification-channel";
+        final CharSequence name = BuildConfig.PUSH_CHANNEL_NAME;
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, name, importance);
         channel.enableLights(true);

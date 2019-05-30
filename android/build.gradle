@@ -22,6 +22,11 @@ def DEFAULT_SUPPORT_LIB_VERSION = "23.1.1"
 def DEFAULT_GOOGLE_PLAY_SERVICES_VERSION = "+"
 def DEFAULT_FIREBASE_MESSAGING_VERSION = "+"
 
+def channelName = rootProject.properties['push_channel_name']
+if( channelName == null ) {
+    channelName="\"app_push\""
+}
+
 android {
     compileSdkVersion project.hasProperty('compileSdkVersion') ? project.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
     buildToolsVersion project.hasProperty('buildToolsVersion') ? project.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
@@ -34,6 +39,8 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        buildConfigField "String", "PUSH_CHANNEL_NAME", "${channelName}"
+
     }
     buildTypes {
         release {
