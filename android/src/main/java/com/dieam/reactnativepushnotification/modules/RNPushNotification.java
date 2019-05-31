@@ -127,7 +127,7 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
 
     @ReactMethod
     public void subscribeToTopic(String topic) {
-        FirebaseMessaging.getInstance().subscribeToTopic(topic);
+//        FirebaseMessaging.getInstance().subscribeToTopic(topic);
     }
 
     @ReactMethod
@@ -210,12 +210,12 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-        /**
-         * Clear notification from the notification centre.
-         */
-        public void clearLocalNotification(int notificationID) {
-            mRNPushNotificationHelper.clearNotification(notificationID);
-        }
+    /**
+     * Clear notification from the notification centre.
+     */
+    public void clearLocalNotification(int notificationID) {
+        mRNPushNotificationHelper.clearNotification(notificationID);
+    }
 
     @ReactMethod
     public void registerNotificationActions(ReadableArray actions) {
