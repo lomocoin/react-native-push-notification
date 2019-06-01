@@ -303,6 +303,10 @@ Notifications.setApplicationIconBadgeNumber = function() {
 	return this.callNative('setApplicationIconBadgeNumber', arguments);
 };
 
+Notifications.getBaiduRegisterBundle = function() {
+	return this.callNative('getBaiduRegisterBundle', arguments);
+};
+
 Notifications.getApplicationIconBadgeNumber = function() {
 	return this.callNative('getApplicationIconBadgeNumber', arguments);
 };

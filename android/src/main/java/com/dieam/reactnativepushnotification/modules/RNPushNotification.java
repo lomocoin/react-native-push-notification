@@ -9,7 +9,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
+import com.dieam.reactnativepushnotification.baidu.MyPushMessageReceiver;
 import com.dieam.reactnativepushnotification.helpers.ApplicationBadgeHelper;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
@@ -26,10 +30,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONObject;
 
 public class RNPushNotification extends ReactContextBaseJavaModule implements ActivityEventListener {
     public static final String LOG_TAG = "RNPushNotification";// all logging should use this tag
+
+
+    ReactContext reactContext;
+
+    public static final String BD_REGISTER_RECEIVER = ".RNPushNotificationBaiduBind";// all logging should use this tag
 
     private RNPushNotificationHelper mRNPushNotificationHelper;
     private final Random mRandomNumberGenerator = new Random(System.currentTimeMillis());
@@ -38,6 +50,7 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
     public RNPushNotification(ReactApplicationContext reactContext) {
         super(reactContext);
 
+        this.reactContext = reactContext;
         reactContext.addActivityEventListener(this);
 
         Application applicationContext = (Application) reactContext.getApplicationContext();
@@ -47,6 +60,7 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
         mJsDelivery = new RNPushNotificationJsDelivery(reactContext);
 
         registerNotificationsRegistration();
+        testRegister();
     }
 
     @Override
@@ -62,6 +76,24 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
     }
 
     public void onNewIntent(Intent intent) {
+        if (intent != null && intent.hasExtra("notification")
+                && intent.getBundleExtra("notification").getString("id") != null) {
+            try {
+                Bundle bundle = intent.getExtras().getBundle("notification");
+                JSONObject base = new JSONObject();
+                JSONObject data = new JSONObject();
+                data.put("targetId", bundle.getString("id", ""));
+                data.put("action", bundle.getString("mTarget", ""));
+                base.put("userInfo", data);
+                WritableMap params = Arguments.createMap();
+                params.putString("dataJSON", base.toString());
+                mJsDelivery.sendEvent("remoteNotificationReceived", params);
+                return;
+            } catch (Exception e) {
+                Log.e("isme_push", "baidu push new intent error");
+            }
+        }
+
         if (intent.hasExtra("notification")) {
             Bundle bundle = intent.getBundleExtra("notification");
             bundle.putBoolean("foreground", false);
@@ -70,16 +102,34 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
         }
     }
 
+    private void testRegister() {
+        IntentFilter intentFilter = new IntentFilter("test_joe");
+
+        getReactApplicationContext().registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String token = intent.getStringExtra("test");
+                WritableMap params = Arguments.createMap();
+                params.putString("test", token);
+
+                reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                        .emit("test_joe", params);
+            }
+        }, intentFilter);
+    }
+
+
     private void registerNotificationsRegistration() {
+
         IntentFilter intentFilter = new IntentFilter(getReactApplicationContext().getPackageName() + ".RNPushNotificationRegisteredToken");
 
         getReactApplicationContext().registerReceiver(new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String token = intent.getStringExtra("token");
+                Log.d("isme_push", "收到 Receiver:" + token);
                 WritableMap params = Arguments.createMap();
                 params.putString("deviceToken", token);
-
                 mJsDelivery.sendEvent("remoteNotificationsRegistered", params);
             }
         }, intentFilter);
@@ -217,8 +267,37 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
         mRNPushNotificationHelper.clearNotification(notificationID);
     }
 
+
+    @ReactMethod
+    /**
+     * get baidu push register bundle
+     */
+    public void getBaiduRegisterBundle(Promise promise) {
+        Bundle bundle = MyPushMessageReceiver.getRegisterBundle();
+        if (bundle != null &&
+                bundle.getString("channelId") != null) {
+            WritableMap params = Arguments.createMap();
+            params.putString("appid", bundle.getString("appid"));
+            params.putString("userId", bundle.getString("userId"));
+            params.putString("token", bundle.getString("channelId"));
+            params.putString("requestId", bundle.getString("requestId"));
+            promise.resolve(params);
+        } else {
+            promise.reject("error", "baidu_resiger_error");
+        }
+    }
+
+
     @ReactMethod
     public void registerNotificationActions(ReadableArray actions) {
         registerNotificationsReceiveNotificationActions(actions);
+    }
+
+    @ReactMethod
+    public void joeTest() {
+        Log.d("isme_push", "native 开始初始化");
+        PushManager.startWork(reactContext, PushConstants.LOGIN_TYPE_API_KEY,
+                "hMu1lWQ5CnsKrp8bPUw45Cs4");
+
     }
 }

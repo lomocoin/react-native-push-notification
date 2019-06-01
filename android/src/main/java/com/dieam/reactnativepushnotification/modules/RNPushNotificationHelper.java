@@ -45,7 +45,7 @@ public class RNPushNotificationHelper {
     private static final long ONE_HOUR = 60 * ONE_MINUTE;
     private static final long ONE_DAY = 24 * ONE_HOUR;
 
-    public RNPushNotificationHelper(Application context) {
+    public RNPushNotificationHelper(Context context) {
         this.context = context;
         this.scheduledNotificationsPersistence = context.getSharedPreferences(RNPushNotificationHelper.PREFERENCES_KEY, Context.MODE_PRIVATE);
     }
