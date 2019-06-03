@@ -65,8 +65,6 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
         Log.d(TAG, responseString);
 
         if (errorCode == 0) {
-            // 绑定成功
-            Log.d(TAG, "绑定成功");
             Bundle bundle = new Bundle();
             bundle.putString("appid", appid);
             bundle.putString("userId", userId);

@@ -116,6 +116,11 @@ NotificationsComponent.prototype.registerNotificationActions = function(details:
 	RNPushNotification.registerNotificationActions(details);
 }
 
+NotificationsComponent.prototype.registerBaiduPush = function(key: string) {
+	RNPushNotification.registerBaiduPush(key);
+}
+
+
 NotificationsComponent.prototype.clearAllNotifications = function() {
 	RNPushNotification.clearAllNotifications()
 }

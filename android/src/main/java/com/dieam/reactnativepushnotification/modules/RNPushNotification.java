@@ -127,7 +127,6 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
             @Override
             public void onReceive(Context context, Intent intent) {
                 String token = intent.getStringExtra("token");
-                Log.d("isme_push", "收到 Receiver:" + token);
                 WritableMap params = Arguments.createMap();
                 params.putString("deviceToken", token);
                 mJsDelivery.sendEvent("remoteNotificationsRegistered", params);
@@ -294,10 +293,10 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
     }
 
     @ReactMethod
-    public void joeTest() {
-        Log.d("isme_push", "native 开始初始化");
-        PushManager.startWork(reactContext, PushConstants.LOGIN_TYPE_API_KEY,
-                "hMu1lWQ5CnsKrp8bPUw45Cs4");
+    public void registerBaiduPush(String key) {
+        Log.d("isme_push", "native开始初始化,key:" + key);
+        PushManager.startWork(reactContext,
+                PushConstants.LOGIN_TYPE_API_KEY, key);
 
     }
 }

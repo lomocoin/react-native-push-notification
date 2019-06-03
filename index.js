@@ -329,6 +329,10 @@ Notifications.registerNotificationActions = function() {
 	return this.callNative('registerNotificationActions', arguments)
 }
 
+Notifications.registerBaiduPush = function() {
+	return this.callNative('registerBaiduPush', arguments)
+}
+
 Notifications.clearAllNotifications = function() {
 	// Only available for Android
 	return this.callNative('clearAllNotifications', arguments)
