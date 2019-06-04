@@ -110,7 +110,7 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
         Bundle bundle = new Bundle();
         try {
             JSONObject baseOb = new JSONObject(message);
-            JSONObject ob = baseOb.getJSONObject("data");
+            JSONObject ob = baseOb.has("data") ? baseOb.getJSONObject("data") : baseOb;
 
             bundle.putString("id", ob.has("id") ? ob.getString("id") : "0");
             bundle.putString("title", ob.has("title") ? ob.getString("title") : "");
