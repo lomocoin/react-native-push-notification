@@ -85,10 +85,10 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
                 Bundle bundle = intent.getExtras().getBundle("notification");
                 if (bundle.containsKey("userInfo")) {
                     Bundle userData = bundle.getBundle("userInfo");
-                    data.put("targetId", userData.getString("id", ""));
+                    data.put("id", userData.getString("id", ""));
                     data.put("action", userData.getString("action", ""));
                 } else {
-                    data.put("targetId", bundle.getString("id", ""));
+                    data.put("id", bundle.getString("id", ""));
                     data.put("action", bundle.getString("action", ""));
                 }
 
