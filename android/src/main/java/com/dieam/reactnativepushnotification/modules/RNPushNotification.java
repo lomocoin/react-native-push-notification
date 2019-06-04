@@ -79,11 +79,19 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
         if (intent != null && intent.hasExtra("notification")
                 && intent.getBundleExtra("notification").getString("id") != null) {
             try {
-                Bundle bundle = intent.getExtras().getBundle("notification");
                 JSONObject base = new JSONObject();
                 JSONObject data = new JSONObject();
-                data.put("targetId", bundle.getString("id", ""));
-                data.put("action", bundle.getString("mTarget", ""));
+
+                Bundle bundle = intent.getExtras().getBundle("notification");
+                if (bundle.containsKey("userInfo")) {
+                    Bundle userData = bundle.getBundle("userInfo");
+                    data.put("targetId", userData.getString("id", ""));
+                    data.put("action", userData.getString("action", ""));
+                } else {
+                    data.put("targetId", bundle.getString("id", ""));
+                    data.put("action", bundle.getString("action", ""));
+                }
+
                 base.put("userInfo", data);
                 WritableMap params = Arguments.createMap();
                 params.putString("dataJSON", base.toString());

@@ -118,7 +118,7 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
             bundle.putString("largeIcon", "");
             bundle.putBoolean("playSound", true);
             bundle.putBoolean("vibrate", true);
-            bundle.putString("mTarget", ob.has("action") ? ob.getString("action") : "");
+            bundle.putString("action", ob.has("action") ? ob.getString("action") : "");
 
             RNPushNotificationHelper helper = new RNPushNotificationHelper(context);
             helper.sendToNotificationCentre(bundle);
