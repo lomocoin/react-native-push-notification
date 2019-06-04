@@ -266,6 +266,6 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
             Log.d(TAG, "解绑成功");
         }
     }
-    // bank commit test
+    // bank commit test 1
 
 }
