@@ -109,7 +109,9 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
         //{"id":991,"action":"ChatMessage","title":"这是昵称","content":"收到一条新消息"}
         Bundle bundle = new Bundle();
         try {
-            JSONObject ob = new JSONObject(message);
+            JSONObject baseOb = new JSONObject(message);
+            JSONObject ob = baseOb.getJSONObject("data");
+
             bundle.putString("id", ob.has("id") ? ob.getString("id") : "0");
             bundle.putString("title", ob.has("title") ? ob.getString("title") : "");
             bundle.putString("message", ob.has("content") ? ob.getString("content") : "");
