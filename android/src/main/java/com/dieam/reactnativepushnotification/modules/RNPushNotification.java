@@ -302,9 +302,9 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
 
     @ReactMethod
     public void registerBaiduPush(String key) {
-        Log.d("isme_push", "native开始初始化,key:" + key);
-        PushManager.startWork(reactContext,
-                PushConstants.LOGIN_TYPE_API_KEY, key);
+//        Log.d("isme_push", "native开始初始化,key:" + key);
+//        PushManager.startWork(reactContext,
+//                PushConstants.LOGIN_TYPE_API_KEY, key);
 
     }
 }

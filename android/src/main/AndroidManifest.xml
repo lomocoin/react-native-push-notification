@@ -2,80 +2,203 @@
     package="com.dieam.reactnativepushnotification">
 
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_ADDED" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_CHANGED" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_INSTALL" />
+    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REPLACED" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!--华为-->
+    <uses-permission android:name="${applicationId}.permission.PROCESS_PUSH_MSG" />
 
 
-        <!--&lt;!&ndash; Push service 运行需要的权限 &ndash;&gt;-->
-        <!--<uses-permission android:name="android.permission.INTERNET" />-->
-        <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
-        <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
-        <!--<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />-->
-        <!--<uses-permission android:name="android.permission.WRITE_SETTINGS" />-->
-        <!--<uses-permission android:name="android.permission.VIBRATE" />-->
-        <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-        <!--<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />-->
-        <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
-        <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
-        <!--&lt;!&ndash; 富媒体需要声明的权限 &ndash;&gt;-->
-        <!--<uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>-->
-        <!--<uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />-->
-        <!--<uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />-->
+    <application>
 
-        <!--&lt;!&ndash; 适配Android N系统必需的ContentProvider写权限声明，写权限包含应用包名&ndash;&gt;-->
-        <!--<uses-permission android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.YourPackageName" />-->
-        <!--<permission-->
-            <!--android:name="baidu.push.permission.WRITE_PUSHINFOPROVIDER.YourPackageName"-->
-            <!--android:protectionLevel="signature">-->
-        <!--</permission>-->
+        <service
+            android:name="com.taobao.accs.ChannelService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.SERVICE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.ELECTION" />
+            </intent-filter>
+        </service>
 
-        <!--&lt;!&ndash; push service start &ndash;&gt;-->
-        <!--&lt;!&ndash; 用于接收系统消息以保证PushService正常运行 &ndash;&gt;-->
-        <!--<receiver android:name="com.baidu.android.pushservice.PushServiceReceiver"-->
-            <!--android:process=":bdservice_v1" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
-                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
-                <!--<action android:name="com.baidu.android.pushservice.action.notification.SHOW" />-->
-                <!--<action android:name="com.baidu.android.pushservice.action.media.CLICK" />-->
-                <!--&lt;!&ndash; 以下四项为可选的action声明，可大大提高service存活率和消息到达速度 &ndash;&gt;-->
-                <!--<action android:name="android.intent.action.MEDIA_MOUNTED" />-->
-                <!--<action android:name="android.intent.action.USER_PRESENT" />-->
-                <!--<action android:name="android.intent.action.ACTION_POWER_CONNECTED" />-->
-                <!--<action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-        <!--&lt;!&ndash; Push服务接收客户端发送的各种请求&ndash;&gt;-->
-        <!--<receiver android:name="com.baidu.android.pushservice.RegistrationReceiver"-->
-            <!--android:process=":bdservice_v1" >-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.baidu.android.pushservice.action.METHOD" />-->
-                <!--<action android:name="com.baidu.android.pushservice.action.BIND_SYNC" />-->
-            <!--</intent-filter>-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.PACKAGE_REMOVED" />-->
-                <!--<data android:scheme="package" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-        <!--<service android:name="com.baidu.android.pushservice.PushService" android:exported="true"-->
-            <!--android:process=":bdservice_v1" >-->
-            <!--<intent-filter >-->
-                <!--<action android:name="com.baidu.android.pushservice.action.PUSH_SERVICE" />-->
-            <!--</intent-filter>-->
-        <!--</service>-->
+        <service
+            android:name="com.taobao.accs.data.MsgDistributeService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.RECEIVE" />
+            </intent-filter>
+        </service>
 
-        <!--&lt;!&ndash; 4.4版本新增的CommandService声明，提升小米和魅族手机上的实际推送到达率 &ndash;&gt;-->
-        <!--<service android:name="com.baidu.android.pushservice.CommandService"-->
-            <!--android:exported="true" />-->
+        <receiver
+            android:name="com.taobao.accs.EventReceiver"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
 
-        <!--&lt;!&ndash; 适配Android N系统必需的ContentProvider声明，写权限包含应用包名&ndash;&gt;-->
-        <!--<provider-->
-            <!--android:name="com.baidu.android.pushservice.PushInfoProvider"-->
-            <!--android:authorities="YourPackageName.bdpush"-->
-            <!--android:writePermission="baidu.push.permission.WRITE_PUSHINFOPROVIDER.YourPackageName"-->
-            <!--android:protectionLevel = "signature"-->
-            <!--android:exported="true" />-->
+        <receiver
+            android:name="com.taobao.accs.ServiceReceiver"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.COMMAND" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.START_FROM_AGOO" />
+            </intent-filter>
+        </receiver>
 
-        <!--&lt;!&ndash; push结束 &ndash;&gt;-->
+        <service
+            android:name="com.taobao.accs.internal.AccsJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":channel" />
 
-    <!--</manifest>-->
+        <service
+            android:name="com.taobao.accs.ChannelService$KernelService"
+            android:process=":channel" />
+
+        <service
+            android:name="org.android.agoo.accs.AgooService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.taobao.accs.intent.action.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.umeng.message.UmengIntentService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="org.agoo.android.intent.action.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.umeng.message.XiaomiIntentService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="org.agoo.android.intent.action.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.taobao.agoo.AgooCommondReceiver"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="${applicationId}.intent.action.COMMAND" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.umeng.message.UmengMessageIntentReceiverService"
+            android:exported="true"
+            android:process=":channel">
+            <intent-filter>
+                <action android:name="org.android.agoo.client.MessageReceiverService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.umeng.message.NotificationProxyBroadcastReceiver"
+            android:exported="false" />
+
+        <service
+            android:name="com.umeng.message.UmengMessageCallbackHandlerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.umeng.messge.registercallback.action" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.umeng.message.enablecallback.action" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.umeng.message.disablecallback.action" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.umeng.message.message.handler.action" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.umeng.message.message.sendmessage.action" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:exported="true"
+            android:name="org.android.agoo.xiaomi.MiPushBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.ERROR" />
+            </intent-filter>
+        </receiver>
+
+
+        <service
+            android:name="com.umeng.message.UmengDownloadResourceService"
+            android:exported="false" />
+
+        <provider
+            android:name="com.umeng.message.provider.MessageProvider"
+            android:authorities="${applicationId}.umeng.message"
+            android:exported="false">
+            <grant-uri-permission android:pathPattern=".*" />
+        </provider>
+
+        <!--华为-->
+
+        <!-- 接入HMSSDK PUSH模块需要注册，第三方相关 :接收Push消息（注册、透传消息、通知栏点击事件）广播，
+                此receiver类需要开发者自己创建并继承com.huawei.hms.support.api.push.PushReceiver类，
+                参考示例代码中的类：com.huawei.hmsagent.HuaweiPushRevicer${PACKAGE_NAME} 要替换上您应用的包名-->
+        <receiver
+            android:name="org.android.agoo.huawei.HuaweiPushReceiver"
+            android:permission="${applicationId}.permission.PROCESS_PUSH_MSG">
+            <intent-filter>
+                <!-- 必须,用于接收token -->
+                <action android:name="com.huawei.android.push.intent.REGISTRATION" />
+                <!-- 必须, 用于接收透传消息 -->
+                <action android:name="com.huawei.android.push.intent.RECEIVE" />
+                <!-- 必须, 用于接收通知栏消息点击事件 此事件不需要开发者处理，只需注册就可以-->
+                <action android:name="com.huawei.intent.action.PUSH_DELAY_NOTIFY" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
 
 </manifest>
