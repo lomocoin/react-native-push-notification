@@ -22,7 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- *
+ * umeng 推送解析类，用于适配react-native
+ * umeng 厂商通道只适配了native
  *
  * @author qiaojiayan
  * @date 2019/6/11
@@ -43,7 +44,7 @@ public class PushIntentParse {
 
         if (intent != null && intent.getExtras() != null) {
             for (String key : intent.getExtras().keySet()) {
-                Log.e("isme29", "key2:" + key + "  value2:" + intent.getExtras().getString(key, "null value"));
+                Log.d("isme29", "key2:" + key + "  value2:" + intent.getExtras().getString(key, "null value"));
             }
         }
 
@@ -103,7 +104,7 @@ public class PushIntentParse {
     private JSONObject onMessage(Intent intent) {
         if (intent != null && intent.hasExtra("body")) {
             String str = intent.getStringExtra("body");
-            Log.e("isme", "body:" + str);
+            Log.d("isme", "body:" + str);
             try {
                 JSONObject object = new JSONObject(str);
                 JSONObject result = object.getJSONObject("extra");
@@ -111,7 +112,7 @@ public class PushIntentParse {
             } catch (JSONException e) {
             }
 //            for (String key : intent.getExtras().keySet()) {
-//                Log.e("isme29", "key:" + key + "  value:" + intent.getExtras().getString(key, "null value"));
+//                Log.d("isme29", "key:" + key + "  value:" + intent.getExtras().getString(key, "null value"));
 //            }
         }
         return null;
@@ -143,7 +144,7 @@ public class PushIntentParse {
             Log.d(TAG, "var2: is null");
 //            com.taobao.accs.utl.b.a("accs", "error", "parse 3push error", 0.0D);
         } else {
-            Log.e("BaseNotifyClickActivity", "var2:" + var2);
+            Log.d("BaseNotifyClickActivity", "var2:" + var2);
             this.msgSource = ((BaseNotifyClickActivity.INotifyListener) var3).getMsgSource();
 //            com.taobao.accs.utl.b.a("accs", "error", "parse 3push default " + this.msgSource, 0.0D);
         }
@@ -167,7 +168,7 @@ public class PushIntentParse {
             ALog.i(TAG, "reportClickNotifyMsg messageId:" + var2 + " source:" + var3 + " reportStr:" + var4 + " status:" + var6.msgStatus, new Object[0]);
             this.notifyManager.report(var6, (TaoBaseService.ExtraInfo) null);
         } catch (Exception var7) {
-            ALog.e(TAG, "reportClickNotifyMsg exception: " + var7, new Object[0]);
+            ALog.d(TAG, "reportClickNotifyMsg exception: " + var7, new Object[0]);
         }
 
     }
