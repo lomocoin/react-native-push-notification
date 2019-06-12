@@ -15,6 +15,7 @@ import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 import com.dieam.reactnativepushnotification.baidu.MyPushMessageReceiver;
 import com.dieam.reactnativepushnotification.helpers.ApplicationBadgeHelper;
+import com.dieam.reactnativepushnotification.umeng.PushIntentParse;
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -33,6 +34,7 @@ import java.util.Random;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RNPushNotification extends ReactContextBaseJavaModule implements ActivityEventListener {
@@ -102,11 +104,42 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
             }
         }
 
-        if (intent.hasExtra("notification")) {
+        if (intent != null && intent.hasExtra("notification")) {
             Bundle bundle = intent.getBundleExtra("notification");
             bundle.putBoolean("foreground", false);
             intent.putExtra("notification", bundle);
             mJsDelivery.notifyNotification(bundle);
+            return;
+        }
+
+        if (intent != null && intent.hasExtra("messageId")) { // 厂商推送
+            JSONObject ob = new PushIntentParse().parse(reactContext, intent);
+            if (ob != null && ob.has("id") && ob.has("action")) {
+                try {
+                    JSONObject base = new JSONObject();
+                    base.put("userInfo", ob);
+                    WritableMap params = Arguments.createMap();
+                    params.putString("dataJSON", base.toString());
+                    mJsDelivery.sendEvent("remoteNotificationReceived", params);
+                    return;
+                } catch (JSONException e) {
+                }
+            }
+        }
+
+        if (intent != null && intent.hasExtra("id") && intent.hasExtra("action")) { // umeng推送
+            JSONObject ob = new JSONObject();
+            try {
+                ob.put("id", intent.getStringExtra("id"));
+                ob.put("action", intent.getStringExtra("action"));
+                JSONObject base = new JSONObject();
+                base.put("userInfo", ob);
+                WritableMap params = Arguments.createMap();
+                params.putString("dataJSON", base.toString());
+                mJsDelivery.sendEvent("remoteNotificationReceived", params);
+                return;
+            } catch (JSONException e) {
+            }
         }
     }
 
