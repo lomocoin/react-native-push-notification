@@ -6,6 +6,7 @@ var {
 } = require('react-native');
 
 var RNPushNotification = NativeModules.RNPushNotification;
+var UMPushModule = NativeModules.UMPushModule;
 var _notifHandlers = new Map();
 
 var DEVICE_NOTIF_EVENT = 'remoteNotificationReceived';
@@ -38,8 +39,8 @@ NotificationsComponent.prototype.cancelLocalNotifications = function(details: Ob
 	RNPushNotification.cancelLocalNotifications(details);
 };
 
-NotificationsComponent.prototype.getBaiduRegisterBundle = function() {
-	return RNPushNotification.getBaiduRegisterBundle();
+NotificationsComponent.prototype.getPushToken = function() {
+	return RNPushNotification.getPushToken();
 };
 
 NotificationsComponent.prototype.clearLocalNotification = function(details: Object) {
@@ -124,6 +125,25 @@ NotificationsComponent.prototype.registerBaiduPush = function(key: string) {
 NotificationsComponent.prototype.clearAllNotifications = function() {
 	RNPushNotification.clearAllNotifications()
 }
+
+
+// umeng push
+NotificationsComponent.prototype.getAllTag = function() {
+	return UMPushModule.getAllTag()
+}
+
+NotificationsComponent.prototype.addTag = function(tags: string[]) {
+	return UMPushModule.addTag(tags)
+}
+
+NotificationsComponent.prototype.deleteTag = function(tags: string[]) {
+	return UMPushModule.deleteTag(tags)
+}
+
+NotificationsComponent.prototype.deleteAllTag = function() {
+	return UMPushModule.deleteAllTag()
+}
+
 
 module.exports = {
 	state: false,

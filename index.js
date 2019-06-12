@@ -303,8 +303,8 @@ Notifications.setApplicationIconBadgeNumber = function() {
 	return this.callNative('setApplicationIconBadgeNumber', arguments);
 };
 
-Notifications.getBaiduRegisterBundle = function() {
-	return this.callNative('getBaiduRegisterBundle', arguments);
+Notifications.getPushToken = function() {
+	return this.callNative('getPushToken', arguments);
 };
 
 Notifications.getApplicationIconBadgeNumber = function() {
@@ -336,6 +336,20 @@ Notifications.registerBaiduPush = function() {
 Notifications.clearAllNotifications = function() {
 	// Only available for Android
 	return this.callNative('clearAllNotifications', arguments)
+}
+
+//umeng push
+Notifications.getAllTag = function() {
+	return this.callNative('getAllTag', arguments)
+}
+Notifications.addTag = function() {
+	return this.callNative('addTag', arguments)
+}
+Notifications.deleteTag = function() {
+	return this.callNative('deleteTag', arguments)
+}
+Notifications.deleteAllTag = function() {
+	return this.callNative('deleteAllTag', arguments)
 }
 
 module.exports = Notifications;

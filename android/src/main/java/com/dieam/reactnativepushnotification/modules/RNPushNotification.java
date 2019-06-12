@@ -137,6 +137,7 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
                 String token = intent.getStringExtra("token");
                 WritableMap params = Arguments.createMap();
                 params.putString("deviceToken", token);
+                Log.d("isme", "on receiver:" + token);
                 mJsDelivery.sendEvent("remoteNotificationsRegistered", params);
             }
         }, intentFilter);
@@ -277,17 +278,13 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
 
     @ReactMethod
     /**
-     * get baidu push register bundle
+     * get push token register bundle
      */
-    public void getBaiduRegisterBundle(Promise promise) {
-        Bundle bundle = MyPushMessageReceiver.getRegisterBundle();
-        if (bundle != null &&
-                bundle.getString("channelId") != null) {
+    public void getPushToken(Promise promise) {
+        String token = UMPushModule.getToken();
+        if (token != null && !token.equals("")) {
             WritableMap params = Arguments.createMap();
-            params.putString("appid", bundle.getString("appid"));
-            params.putString("userId", bundle.getString("userId"));
-            params.putString("token", bundle.getString("channelId"));
-            params.putString("requestId", bundle.getString("requestId"));
+            params.putString("token", token);
             promise.resolve(params);
         } else {
             promise.reject("error", "baidu_resiger_error");
@@ -305,6 +302,5 @@ public class RNPushNotification extends ReactContextBaseJavaModule implements Ac
 //        Log.d("isme_push", "native开始初始化,key:" + key);
 //        PushManager.startWork(reactContext,
 //                PushConstants.LOGIN_TYPE_API_KEY, key);
-
     }
 }
